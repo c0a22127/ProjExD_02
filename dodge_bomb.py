@@ -16,6 +16,17 @@ move_lst = {
     pg.K_UP: (0, -5),
     pg.K_DOWN: (0, 5),
 }
+
+rotozoom_lst = {
+    "(-5, 0)": pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 2.0),
+    "(5, 0)": pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 0, 2.0),
+    "(0, -5)": pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), False, True), -90, 2.0),
+    "(0, 5)": pg.transform.rotozoom(pg.image.load("fig/3.png"), 90, 2.0),
+    "(5, -5)": pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), -45, 2.0),
+    "(-5, -5)": pg.transform.rotozoom(pg.image.load("fig/3.png"), -45, 2.0),
+    "(5, 5)": pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 45, 2.0),
+}
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -25,7 +36,6 @@ def main():
     # こうかとん作成
     # ===========================
     kk_img = pg.image.load("fig/3.png")
-    kk_img_fliped_1 = pg.transform.flip(kk_img, True, False)
 
     kk_rct = kk_img.get_rect()
     kk_rct.center = (900, 400)  # 画像の中心座標を設定
@@ -65,11 +75,13 @@ def main():
         
         key_lst = pg.key.get_pressed()
         total_movement = [0, 0]
+        key_movement = (0, 0)
 
         for key, mv in move_lst.items():
             if key_lst[key]:
                 total_movement[0] += mv[0]
                 total_movement[1] += mv[1]
+                key_movement = mv
 
         kk_rct.move_ip(total_movement) # こうかとんの移動
 
@@ -84,7 +96,10 @@ def main():
             vx *= -1
 
         screen.blit(bg_img, [0, 0])
-        screen.blit(pg.transform.rotozoom(kk_img, 0, 2.0), kk_rct)
+        if key_movement != (0, 0):
+            screen.blit(rotozoom_lst[str(key_movement)], kk_rct)
+        else:
+            screen.blit(pg.transform.rotozoom(kk_img, 0, 2.0), kk_rct)
         screen.blit(circle, bomb_rct)
         pg.display.flip()
         tmr += 1
