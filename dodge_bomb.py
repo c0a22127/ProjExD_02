@@ -27,6 +27,21 @@ rotozoom_lst = {
     "(5, 5)": pg.transform.rotozoom(pg.transform.flip(pg.image.load("fig/3.png"), True, False), 45, 2.0),
 }
 
+def render_game_over(screen: pg.Surface, kk_rct: tuple) -> None:
+    """
+    ゲームオーバーを表示する関数\n
+    引数: screen: Surface, kk_rct: こうかとんRect\n
+    戻り値: なし
+    """
+    kk_pien = pg.image.load("fig/8.png")
+    kk_pien = pg.transform.rotozoom(kk_pien, 0, 2.0)
+    pien_rct = kk_pien.get_rect()
+    pien_rct = kk_rct
+    screen.blit(kk_pien, pien_rct)
+    pg.display.update()
+    time.sleep(3)
+    return
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -64,13 +79,8 @@ def main():
             
         if kk_rct.colliderect(bomb_rct):
             print("GAME OVER")
-            kk_pien = pg.image.load("fig/8.png")
-            kk_pien = pg.transform.rotozoom(kk_pien, 0, 2.0)
-            pien_rct = kk_pien.get_rect()
-            pien_rct = kk_rct
-            screen.blit(kk_pien, pien_rct)
-            pg.display.update()
-            time.sleep(3)
+            # こうかとんが泣く
+            render_game_over(screen, kk_rct)
             return
         
         key_lst = pg.key.get_pressed()
