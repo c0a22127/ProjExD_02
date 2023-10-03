@@ -48,7 +48,10 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        
+            
+        if kk_rct.colliderect(bomb_rct):
+            print("GAME OVER")
+            return
         
         key_lst = pg.key.get_pressed()
         total_movement = [0, 0]
